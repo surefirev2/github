@@ -1,0 +1,8 @@
+# Pilot-only: do not add repos until barn-league-hockey evaluation passes.
+repositories:
+  - barn-league-hockey
+
+include_paths:
+  - .github/workflows/automerge-gate.yml
+
+exclude_paths: []

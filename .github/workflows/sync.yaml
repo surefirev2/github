@@ -1,0 +1,52 @@
+# Template Sync: runs surefirev2/repo-sync-action. Config: .github/template-sync.yml
+name: Template Sync
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no clone/push/PR)'
+        required: false
+        default: false
+        type: boolean
+      draft_pr:
+        description: 'Create PRs as draft'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  template-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && 2 || 1 }}
+
+      - name: Create GitHub App token
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run template sync
+        uses: surefirev2/repo-sync-action@v1.0.1
+        with:
+          config_path: .github/template-sync.yml
+          org: ${{ github.repository_owner }}
+          token: ${{ steps.app-token.outputs.token }}
+          dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+          draft_pr: ${{ github.event_name == 'workflow_dispatch' && inputs.draft_pr || false }}

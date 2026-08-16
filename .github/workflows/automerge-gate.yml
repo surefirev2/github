@@ -1,0 +1,31 @@
+# Vendored public-mode gate from pkgdeps/automerge-gate.
+# Pin immutable tag; Dependabot/Renovate can bump. Required check name:
+# automerge-gate/all-passed
+name: automerge-gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, auto_merge_enabled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: automerge-gate/all-passed
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      checks: read
+      pull-requests: read
+      actions: read
+    steps:
+      - uses: pkgdeps/automerge-gate@v5.0.0
+        with:
+          gate-mode: public
+          ignore-checks: |
+            [
+              { "name": "dependabot-automerge" },
+              { "name": "Validate PR titles" }
+            ]
