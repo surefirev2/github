@@ -47,15 +47,15 @@ anything.
 
 ### If missing — configure on this repo (or org)
 
-1. Open the App: [surefirev2-token-app installation](https://github.com/organizations/surefirev2/settings/installations/65632433)  
-   Ensure it can access `github` and every sync target (`barn-league-hockey` today).  
+1. Open the App: [surefirev2-token-app installation](https://github.com/organizations/surefirev2/settings/installations/65632433)
+   Ensure it can access `github` and every sync target (`barn-league-hockey` today).
    App permissions needed: **Contents** read/write, **Pull requests** read/write (and usually **Metadata** read).
 2. Get the App ID from [GitHub Apps settings](https://github.com/settings/apps) (or the installation page) — for this org it is **1237232**.
 3. Create or download a **private key** for the App (GitHub Apps → your app → Private keys → Generate).
 4. Set on **this repository** (or org-wide if that is how `template-template` is wired):
    - Variable `APP_ID` = `1237232` → [Add variable](https://github.com/surefirev2/github/settings/variables/actions)
    - Secret `PRIVATE_KEY` = PEM contents → [Add secret](https://github.com/surefirev2/github/settings/secrets/actions)
-5. Re-run sync: [Actions → Template Sync → Run workflow](https://github.com/surefirev2/github/actions/workflows/sync.yaml)  
+5. Re-run sync: [Actions → Template Sync → Run workflow](https://github.com/surefirev2/github/actions/workflows/sync.yaml)
    Prefer **dry_run: true** first, then a real run (or merge a hub PR to `main`).
 
 ### Optional hardening
