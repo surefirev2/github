@@ -1,8 +1,23 @@
-# Pilot-only: do not add repos until barn-league-hockey evaluation passes.
+# Pilot + OpenLore distribution.
+# OpenLore workflows, CI fallback config, and the Cursor orient rule are
+# additive (unique filenames). automerge-gate stays barn-league-hockey-only
+# via repo_include_paths. Do not sync .openlore/config.json.
+#
+# repo-sync-action opens PRs in targets; it does not push to default branches.
 repositories:
   - barn-league-hockey
+  - hockeymind
+  - math-desktop
+  - math_spike2
 
 include_paths:
-  - .github/workflows/automerge-gate.yml
+  - .github/workflows/openlore-review.yml
+  - .github/workflows/openlore-ci.yml
+  - .github/openlore-config.json
+  - .cursor/rules/openlore.mdc
+
+repo_include_paths:
+  barn-league-hockey:
+    - .github/workflows/automerge-gate.yml
 
 exclude_paths: []

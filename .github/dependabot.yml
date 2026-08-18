@@ -1,0 +1,17 @@
+# Dependabot: scheduled VERSION updates. Security updates stay ungrouped.
+#
+# github-actions is the important half. Workflows pin actions to immutable
+# commit SHAs; Dependabot proposes the SHA bumps.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns: ['*']

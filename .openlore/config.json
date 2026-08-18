@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "projectType": "github-actions",
+  "openspecPath": "./openspec",
+  "analysis": {
+    "maxFiles": 500,
+    "includePatterns": [],
+    "excludePatterns": []
+  },
+  "enforcement": {
+    "policy": {}
+  }
+}

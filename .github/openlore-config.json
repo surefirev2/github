@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "projectType": "nodejs",
+  "openspecPath": "./openspec",
+  "analysis": {
+    "maxFiles": 100000,
+    "includePatterns": [],
+    "excludePatterns": []
+  },
+  "enforcement": {
+    "policy": {}
+  }
+}
