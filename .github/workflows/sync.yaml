@@ -43,7 +43,7 @@ jobs:
           owner: ${{ github.repository_owner }}
 
       - name: Run template sync
-        uses: surefirev2/repo-sync-action@v1.0.1
+        uses: surefirev2/repo-sync-action@v1.0.3
         with:
           config_path: .github/template-sync.yml
           org: ${{ github.repository_owner }}
