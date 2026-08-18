@@ -1,0 +1,12 @@
+# OpenLore: commit config; ignore the rebuildable index and machine-local state.
+.openlore/analysis/
+.openlore/telemetry/
+.openlore/decisions/
+.mcp.json
+.cursor/mcp.json
+
+# OS / editor
+.DS_Store
+*.swp
+*.swo
+*~

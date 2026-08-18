@@ -27,5 +27,6 @@ jobs:
           ignore-checks: |
             [
               { "name": "dependabot-automerge" },
-              { "name": "Validate PR titles" }
+              { "name": "Validate PR titles" },
+              { "name": "OpenLore review" }
             ]

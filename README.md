@@ -3,6 +3,10 @@
 Org automation hub for distributing shared GitHub Actions workflows via
 [`surefirev2/repo-sync-action`](https://github.com/surefirev2/repo-sync-action).
 
+This repo is also the **reference OpenLore install**: local pre-commit hooks,
+SHA-pinned Actions, and advisory OpenLore analyze/enforce/review — the same
+shape application repos should use.
+
 ## How changes ship
 
 1. Open a **PR against this hub** (`surefirev2/github`).
@@ -14,17 +18,50 @@ Org automation hub for distributing shared GitHub Actions workflows via
 
 Do **not** open one-off PRs in target repos for files owned by this hub.
 
-## Current pilot
+## Local setup
 
-| Item | Value |
-|------|--------|
-| Workflow | [`.github/workflows/automerge-gate.yml`](.github/workflows/automerge-gate.yml) |
-| Upstream | [`pkgdeps/automerge-gate@v5.0.0`](https://github.com/pkgdeps/automerge-gate) (public mode) |
-| Required check name | `automerge-gate/all-passed` |
-| Sync target | `barn-league-hockey` **only** |
+Requires **Node.js 22.13+** (`node:sqlite`) and Python 3.12+ with
+[`pre-commit`](https://pre-commit.com/).
 
-Do **not** widen `repositories` in `template-sync.yml` until the barn-league
-pilot evaluation passes.
+```bash
+make init    # pre-commit install && npx openlore@2.1.8 install --preset full
+make check   # pre-commit run --all-files
+```
+
+`make init` wires Cursor / `AGENTS.md` managed OpenLore blocks and builds the
+local index (gitignored). Confirm with `npx openlore@2.1.8 doctor`.
+
+Do not skip hooks with `git commit --no-verify`.
+
+## CI
+
+| Workflow | Role | Merge gate |
+|----------|------|------------|
+| `pre-commit.yaml` | YAML/actionlint, semantic PR titles, **CI Success** | required |
+| `openlore-ci.yml` | `openlore analyze` + `enforce` (advisory findings) | required |
+| `openlore-review.yml` | sticky structural PR comment | advisory (ignored by automerge-gate) |
+| `automerge-gate.yml` | `automerge-gate/all-passed` waits for required checks | required |
+| `sync.yaml` | template-sync to downstream repos via PR | not a quality gate |
+
+Actions are pinned to immutable commit SHAs. Dependabot proposes weekly SHA bumps.
+
+## What gets synced
+
+`repo-sync-action` **opens PRs** in targets. It does not push to the target
+default branch.
+
+| Path | Targets |
+|------|---------|
+| `.github/workflows/openlore-review.yml` | hockeymind, math-desktop, math_spike2, barn-league-hockey |
+| `.github/workflows/openlore-ci.yml` | same |
+| `.github/workflows/automerge-gate.yml` | barn-league-hockey only |
+
+**Never synced:** `.pre-commit-config.yaml`, `AGENTS.md`, `CLAUDE.md`,
+`.openlore/config.json`, the OpenLore index.
+
+After a sync PR lands, each application repo should run `npx openlore@2.1.8 install`
+once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
+pre-commit there.
 
 ## GitHub App setup (manual)
 
@@ -48,7 +85,8 @@ anything.
 ### If missing — configure on this repo (or org)
 
 1. Open the App: [surefirev2-token-app installation](https://github.com/organizations/surefirev2/settings/installations/65632433)
-   Ensure it can access `github` and every sync target (`barn-league-hockey` today).
+   Ensure it can access `github` and every sync target (`barn-league-hockey`,
+   `hockeymind`, `math-desktop`, `math_spike2`).
    App permissions needed: **Contents** read/write, **Pull requests** read/write (and usually **Metadata** read).
 2. Get the App ID from [GitHub Apps settings](https://github.com/settings/apps) (or the installation page) — for this org it is **1237232**.
 3. Create or download a **private key** for the App (GitHub Apps → your app → Private keys → Generate).
@@ -63,7 +101,7 @@ anything.
 - Prefer `client-id` over deprecated `app-id` in `create-github-app-token` (workflow warns today).
 - Keep Dependabot/Renovate pin bumps for `pkgdeps/automerge-gate@v5.0.0` on this hub only.
 
-## Evaluation checklist (barn-league pilot)
+## Evaluation checklist (barn-league automerge-gate)
 
 After the sync PR merges on barn-league and Terraform requires `automerge-gate/all-passed`:
 
@@ -71,7 +109,7 @@ After the sync PR merges on barn-league and Terraform requires `automerge-gate/a
 - [ ] Enable Auto Merge waits for the gate; gate waits for real CI (`pre-commit`, `check`, …)
 - [ ] Intentional red CI blocks auto-merge
 - [ ] `ignore-checks` does not drop real required jobs
-- [ ] No wider `template-sync.yml` targets until this passes
+- [ ] Keep `automerge-gate.yml` on barn-league-hockey only until this passes
 
 ## Related
 
