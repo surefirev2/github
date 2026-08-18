@@ -1,6 +1,7 @@
 # Pilot + OpenLore distribution.
-# OpenLore workflows are additive (unique filenames). automerge-gate stays
-# barn-league-hockey-only via repo_include_paths.
+# OpenLore workflows, CI fallback config, and the Cursor orient rule are
+# additive (unique filenames). automerge-gate stays barn-league-hockey-only
+# via repo_include_paths. Do not sync .openlore/config.json.
 #
 # repo-sync-action opens PRs in targets; it does not push to default branches.
 repositories:
@@ -12,6 +13,8 @@ repositories:
 include_paths:
   - .github/workflows/openlore-review.yml
   - .github/workflows/openlore-ci.yml
+  - .github/openlore-config.json
+  - .cursor/rules/openlore.mdc
 
 repo_include_paths:
   barn-league-hockey:

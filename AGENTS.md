@@ -21,12 +21,14 @@ so agents fail fast before push.
 
 - `.github/workflows/openlore-review.yml`
 - `.github/workflows/openlore-ci.yml`
+- `.github/openlore-config.json` (CI fallback if a repo has no local config)
+- `.cursor/rules/openlore.mdc`
 - `.github/workflows/automerge-gate.yml` (barn-league-hockey only)
 
 **Never sync** (per-repo):
 
 - `.pre-commit-config.yaml`
-- `AGENTS.md` / `CLAUDE.md`
+- `AGENTS.md` / `CLAUDE.md` / `.cursorrules`
 - `.openlore/config.json`
 - the OpenLore index under `.openlore/analysis/`
 

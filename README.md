@@ -54,10 +54,12 @@ default branch.
 |------|---------|
 | `.github/workflows/openlore-review.yml` | hockeymind, math-desktop, math_spike2, barn-league-hockey |
 | `.github/workflows/openlore-ci.yml` | same |
+| `.github/openlore-config.json` | same (CI fallback; does not overwrite `.openlore/config.json`) |
+| `.cursor/rules/openlore.mdc` | same |
 | `.github/workflows/automerge-gate.yml` | barn-league-hockey only |
 
 **Never synced:** `.pre-commit-config.yaml`, `AGENTS.md`, `CLAUDE.md`,
-`.openlore/config.json`, the OpenLore index.
+`.cursorrules`, `.openlore/config.json`, the OpenLore index.
 
 After a sync PR lands, each application repo should run `npx openlore@2.1.8 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`

@@ -1,5 +1,9 @@
 # Additive OpenLore governance CI. Safe to template-sync: unique filename.
 # Advisory findings do not fail the job. Fail only if the CLI crashes.
+#
+# Prefer a repo-local .openlore/config.json (never template-synced). Fall back
+# to the org starter at .github/openlore-config.json so analyze can run before
+# a repo has run `openlore init`.
 name: openlore-ci
 
 on:
@@ -30,8 +34,21 @@ jobs:
         with:
           node-version: '22.13'
 
+      - name: Resolve OpenLore config
+        id: openlore-config
+        run: |
+          if [ -f .openlore/config.json ]; then
+            echo "config=.openlore/config.json" >> "$GITHUB_OUTPUT"
+          elif [ -f .github/openlore-config.json ]; then
+            echo "config=.github/openlore-config.json" >> "$GITHUB_OUTPUT"
+          else
+            echo "No OpenLore config found."
+            echo "Commit .openlore/config.json or sync .github/openlore-config.json from surefirev2/github."
+            exit 1
+          fi
+
       - name: Analyze
-        run: npx --yes openlore@2.1.8 analyze --no-embed
+        run: npx --yes openlore@2.1.8 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"
 
       - name: Enforce (advisory)
-        run: npx --yes openlore@2.1.8 enforce
+        run: npx --yes openlore@2.1.8 enforce --config "${{ steps.openlore-config.outputs.config }}"
