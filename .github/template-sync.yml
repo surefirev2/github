@@ -23,15 +23,12 @@ repo_include_paths:
     - .github/workflows/automerge-gate.yml
   hockeymind:
     - .github/workflows/automerge-gate.yml
-  math-desktop:
-    - .github/workflows/automerge-gate.yml
-  math_spike2:
-    - .github/workflows/automerge-gate.yml
-  hockeymind:
     - .github/workflows/pre-commit-upstream-required.yml
   math-desktop:
+    - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
   math_spike2:
+    - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
 
 exclude_paths: []
