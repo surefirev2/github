@@ -15,10 +15,16 @@ include_paths:
   - .github/workflows/openlore-ci.yml
   - .github/openlore-config.json
   - .cursor/rules/openlore.mdc
+  - scripts/check-pre-commit-upstream-required.py
+  - scripts/resolve-openlore-config.sh
 
 repo_include_paths:
   barn-league-hockey:
     - .github/workflows/automerge-gate.yml
+  hockeymind:
+    - .github/workflows/pre-commit-upstream-required.yml
+  math-desktop:
+    - .github/workflows/pre-commit-upstream-required.yml
   math_spike2:
     - .github/workflows/pre-commit-upstream-required.yml
 
