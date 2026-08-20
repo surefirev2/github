@@ -1,0 +1,18 @@
+# Hook provider for surefirev2 application repos.
+# Downstream opts in via .pre-commit-config.yaml — never template-synced.
+#
+#   - repo: https://github.com/surefirev2/github
+#     rev: <pin this hub commit or tag>
+#     hooks:
+#       - id: openlore-preflight
+#
+- id: openlore-preflight
+  name: OpenLore graph freshness
+  description: >
+    Fail if .openlore/index-bundle.olbundle is missing or stale relative to
+    the working tree. Import rebuild-for-currency is treated as failure.
+  entry: scripts/openlore-preflight.sh
+  language: script
+  pass_filenames: false
+  always_run: true
+  stages: [pre-commit]

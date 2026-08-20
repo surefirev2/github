@@ -1,7 +1,11 @@
-# OpenLore: commit config; ignore the rebuildable index and machine-local state.
+# OpenLore: commit config + shareable bundle; ignore rebuildable local index.
 .openlore/analysis/
 .openlore/telemetry/
 .openlore/decisions/
+# Keep tracked:
+#   .openlore/config.json
+#   .openlore/index-bundle.olbundle
+
 .mcp.json
 .cursor/mcp.json
 

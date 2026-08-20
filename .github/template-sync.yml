@@ -19,5 +19,7 @@ include_paths:
 repo_include_paths:
   barn-league-hockey:
     - .github/workflows/automerge-gate.yml
+  math_spike2:
+    - .github/workflows/pre-commit-upstream-required.yml
 
 exclude_paths: []
