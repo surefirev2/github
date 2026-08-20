@@ -36,16 +36,7 @@ jobs:
 
       - name: Resolve OpenLore config
         id: openlore-config
-        run: |
-          if [ -f .openlore/config.json ]; then
-            echo "config=.openlore/config.json" >> "$GITHUB_OUTPUT"
-          elif [ -f .github/openlore-config.json ]; then
-            echo "config=.github/openlore-config.json" >> "$GITHUB_OUTPUT"
-          else
-            echo "No OpenLore config found."
-            echo "Commit .openlore/config.json or sync .github/openlore-config.json from surefirev2/github."
-            exit 1
-          fi
+        run: bash scripts/resolve-openlore-config.sh >> "$GITHUB_OUTPUT"
 
       - name: Analyze
         run: npx --yes openlore@2.1.8 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"

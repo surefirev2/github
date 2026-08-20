@@ -15,6 +15,8 @@ include_paths:
   - .github/workflows/openlore-ci.yml
   - .github/openlore-config.json
   - .cursor/rules/openlore.mdc
+  - scripts/check-pre-commit-upstream-required.py
+  - scripts/resolve-openlore-config.sh
 
 repo_include_paths:
   barn-league-hockey:
