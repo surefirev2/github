@@ -77,25 +77,33 @@ from pathlib import Path
 def load_envelope(path: str) -> dict:
     return json.loads(gzip.decompress(Path(path).read_bytes()).decode("utf-8"))
 
-def content_fingerprint(env: dict) -> dict:
-    manifest = dict(env.get("manifest") or {})
-    for key in ("sourceCommit", "analyzedAt", "builtAt", "exportedAt", "analyzedTree"):
-        manifest.pop(key, None)
-    # Drop nested commit-ish fields from attestation if present.
-    attestation = manifest.get("attestation")
-    if isinstance(attestation, dict):
-        attestation = dict(attestation)
-        for key in ("sourceCommit", "analyzedAt", "builtAt"):
-            attestation.pop(key, None)
-        manifest["attestation"] = attestation
-    return manifest
+def attestation_fingerprint(env: dict) -> dict:
+    """Compare OpenLore integrity attestation only.
 
-committed = content_fingerprint(load_envelope(sys.argv[1]))
-fresh = content_fingerprint(load_envelope(sys.argv[2]))
+    Full payload bytes (e.g. call-graph.db page size) can differ across
+    re-exports even when the graph content digest is identical.
+    """
+    manifest = env.get("manifest") or {}
+    attestation = manifest.get("attestation")
+    if not isinstance(attestation, dict):
+        raise SystemExit("bundle missing manifest.attestation")
+    # Keep only stable integrity fields.
+    committed = attestation.get("committed")
+    return {
+        "attestationVersion": attestation.get("attestationVersion"),
+        "schemaVersion": attestation.get("schemaVersion"),
+        "committed": committed,
+        "digest": attestation.get("digest"),
+    }
+
+committed = attestation_fingerprint(load_envelope(sys.argv[1]))
+fresh = attestation_fingerprint(load_envelope(sys.argv[2]))
 if committed != fresh:
-    print("Committed bundle content does not match a fresh export of this tree.", file=sys.stderr)
+    print("Committed bundle attestation does not match a fresh export of this tree.", file=sys.stderr)
+    print(f"  committed={committed}", file=sys.stderr)
+    print(f"  fresh={fresh}", file=sys.stderr)
     sys.exit(1)
-print("OK: committed OpenLore bundle matches fresh analyze+export content")
+print("OK: committed OpenLore bundle attestation matches fresh analyze+export")
 PY
 fi
 
