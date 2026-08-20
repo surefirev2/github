@@ -40,8 +40,14 @@ Do not skip hooks with `git commit --no-verify`.
 | `pre-commit.yaml` | YAML/actionlint, semantic PR titles, **CI Success** | required |
 | `openlore-ci.yml` | `openlore analyze` + `enforce` (advisory findings) | required |
 | `openlore-review.yml` | sticky structural PR comment | advisory (ignored by automerge-gate) |
+| `pre-commit-upstream-required.yml` | downstream must opt into hub pre-commit hooks | required on opted-in targets |
 | `automerge-gate.yml` | `automerge-gate/all-passed` waits for required checks | required |
 | `sync.yaml` | template-sync to downstream repos via PR | not a quality gate |
+
+OpenLore **freshness** is enforced by the `openlore-preflight` **pre-commit** hook
+(published from this repo). The synced GHA only checks that downstream
+`.pre-commit-config.yaml` includes a parent call to this hub — it never
+overwrites that file.
 
 Actions are pinned to immutable commit SHAs. Dependabot proposes weekly SHA bumps.
 
@@ -57,9 +63,26 @@ default branch.
 | `.github/openlore-config.json` | same (CI fallback; does not overwrite `.openlore/config.json`) |
 | `.cursor/rules/openlore.mdc` | same |
 | `.github/workflows/automerge-gate.yml` | barn-league-hockey only |
+| `.github/workflows/pre-commit-upstream-required.yml` | math_spike2 only (v1) |
 
 **Never synced:** `.pre-commit-config.yaml`, `AGENTS.md`, `CLAUDE.md`,
-`.cursorrules`, `.openlore/config.json`, the OpenLore index.
+`.cursorrules`, `.openlore/config.json`, the OpenLore analysis tree.
+The shareable `.openlore/index-bundle.olbundle` is per-repo (commit it locally).
+
+### Downstream opt-in (parent pre-commit call)
+
+Keep your unique hooks. Add:
+
+```yaml
+  - repo: https://github.com/surefirev2/github
+    rev: <pin a hub commit SHA or tag that has .pre-commit-hooks.yaml>
+    hooks:
+      - id: openlore-preflight
+```
+
+Commit `.openlore/config.json` + `.openlore/index-bundle.olbundle` and refresh with
+`make openlore/refresh` (or `npx openlore@2.1.8 analyze --no-embed && export bundle`)
+after in-graph changes.
 
 After a sync PR lands, each application repo should run `npx openlore@2.1.8 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`

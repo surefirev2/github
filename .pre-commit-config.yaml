@@ -30,6 +30,13 @@ repos:
 
   - repo: local
     hooks:
+      - id: openlore-preflight
+        name: OpenLore graph freshness
+        entry: scripts/openlore-preflight.sh
+        language: script
+        pass_filenames: false
+        always_run: true
+
       - id: openlore-enforce
         name: openlore enforce
         entry: npx --yes openlore@2.1.8 enforce --hook

@@ -24,17 +24,19 @@ so agents fail fast before push.
 - `.github/openlore-config.json` (CI fallback if a repo has no local config)
 - `.cursor/rules/openlore.mdc`
 - `.github/workflows/automerge-gate.yml` (barn-league-hockey only)
+- `.github/workflows/pre-commit-upstream-required.yml` (math_spike2 only for v1)
 
 **Never sync** (per-repo):
 
-- `.pre-commit-config.yaml`
+- `.pre-commit-config.yaml` (downstream must *opt in* with a parent `repos:` entry)
 - `AGENTS.md` / `CLAUDE.md` / `.cursorrules`
 - `.openlore/config.json`
 - the OpenLore index under `.openlore/analysis/`
 
-Downstream hook wiring is a follow-up in each target. hockeymind uses Husky
-(`core.hooksPath=.husky/_`); `openlore enforce --install-hook` writing
-`.git/hooks` is a no-op there.
+OpenLore freshness is the `openlore-preflight` pre-commit hook (see
+`.pre-commit-hooks.yaml`). Refresh the committed bundle with `make openlore/refresh`.
+The synced GHA only fails if a target repo’s pre-commit config lacks the hub
+parent call — it never overwrites that file.
 
 ## OpenLore
 
