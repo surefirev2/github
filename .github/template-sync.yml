@@ -1,11 +1,11 @@
 # Pilot + OpenLore distribution.
 # OpenLore workflows, CI fallback config, and the Cursor orient rule are
-# additive (unique filenames). automerge-gate stays barn-league-hockey-only
+# additive (unique filenames). automerge-gate is sent to all target repos
 # via repo_include_paths. Do not sync .openlore/config.json.
 #
 # repo-sync-action opens PRs in targets; it does not push to default branches.
 repositories:
-  - barn-league-hockey
+  - custos
   - hockeymind
   - math-desktop
   - math_spike2
@@ -19,7 +19,13 @@ include_paths:
   - scripts/resolve-openlore-config.sh
 
 repo_include_paths:
-  barn-league-hockey:
+  custos:
+    - .github/workflows/automerge-gate.yml
+  hockeymind:
+    - .github/workflows/automerge-gate.yml
+  math-desktop:
+    - .github/workflows/automerge-gate.yml
+  math_spike2:
     - .github/workflows/automerge-gate.yml
   hockeymind:
     - .github/workflows/pre-commit-upstream-required.yml
