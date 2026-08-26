@@ -32,7 +32,7 @@ repos:
     hooks:
       - id: openlore-preflight
         name: OpenLore graph freshness
-        entry: env OPENLORE_NPM_PIN=openlore@2.1.9 scripts/openlore-preflight.sh
+        entry: scripts/openlore-preflight.sh
         language: script
         pass_filenames: false
         # Only run when files that affect the OpenLore graph change — skip docs, demos,
@@ -45,7 +45,7 @@ repos:
 
       - id: openlore-enforce
         name: openlore enforce
-        entry: npx --yes openlore@2.1.9 enforce --hook
+        entry: openlore enforce --hook
         language: system
         pass_filenames: false
         files: \\.(ya?ml|md|json)$

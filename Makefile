@@ -1,7 +1,8 @@
 .PHONY: init check openlore/analyze openlore/export openlore/import openlore/preflight openlore/refresh
 
 # Node 22.13+ is required (openlore uses node:sqlite).
-OPENLORE := npx --yes openlore@2.1.8
+OPENLORE := openlore
+PIN := 2.1.9
 BASE_REF ?= origin/main
 
 init:
