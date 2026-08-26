@@ -44,7 +44,7 @@ Call `orient()` at the start of a task when the MCP server is wired. Governance
 is **advisory** until a finding is mapped to `blocking` in `.openlore/config.json`.
 No API key is required for analyze / enforce / review.
 
-Pinned CLI: `openlore@2.1.8`.
+Pinned CLI: `openlore@2.1.9`.
 
 <!-- BEGIN OPENLORE (managed — edits inside this block will be overwritten) -->
 <!-- openlore-fingerprint: 25cdd746ebf39b56 -->

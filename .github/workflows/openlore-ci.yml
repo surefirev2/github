@@ -39,7 +39,7 @@ jobs:
         run: bash scripts/resolve-openlore-config.sh >> "$GITHUB_OUTPUT"
 
       - name: Analyze
-        run: npx --yes openlore@2.1.8 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"
+        run: npx --yes openlore@2.1.9 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"
 
       - name: Enforce (advisory)
-        run: npx --yes openlore@2.1.8 enforce --config "${{ steps.openlore-config.outputs.config }}"
+        run: npx --yes openlore@2.1.9 enforce --config "${{ steps.openlore-config.outputs.config }}"

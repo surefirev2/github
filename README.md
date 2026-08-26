@@ -24,18 +24,18 @@ Requires **Node.js 22.13+** (`node:sqlite`) and Python 3.12+ with
 [`pre-commit`](https://pre-commit.com/).
 
 ```bash
-make init    # pre-commit install && npx openlore@2.1.8 install --preset full
+make init    # pre-commit install && openlore@2.1.9 install --preset full
 make check   # pre-commit run --all-files
 ```
 
 `make init` wires Cursor / `AGENTS.md` managed OpenLore blocks and builds the
-local index (gitignored). Confirm with `npx openlore@2.1.8 doctor`.
+local index (gitignored). Confirm with `openlore@2.1.9 doctor`.
 
 Do not skip hooks with `git commit --no-verify`.
 
 ## CI
 
-| Workflow | Role | Merge gate |
+|| Workflow | Role | Merge gate |
 |----------|------|------------|
 | `pre-commit.yaml` | YAML/actionlint, semantic PR titles, **CI Success** | required |
 | `openlore-ci.yml` | `openlore analyze` + `enforce` (advisory findings) | required |
@@ -56,7 +56,7 @@ Actions are pinned to immutable commit SHAs. Dependabot proposes weekly SHA bump
 `repo-sync-action` **opens PRs** in targets. It does not push to the target
 default branch.
 
-| Path | Targets |
+|| Path | Targets |
 |------|---------|
 | `.github/workflows/openlore-review.yml` | hockeymind, math-desktop, math_spike2, barn-league-hockey |
 | `.github/workflows/openlore-ci.yml` | same |
@@ -81,10 +81,10 @@ Keep your unique hooks. Add:
 ```
 
 Commit `.openlore/config.json` + `.openlore/index-bundle.olbundle` and refresh with
-`make openlore/refresh` (or `npx openlore@2.1.8 analyze --no-embed && export bundle`)
+`make openlore/refresh` (or `openlore@2.1.9 analyze --no-embed && openlore export bundle`)
 after in-graph changes.
 
-After a sync PR lands, each application repo should run `npx openlore@2.1.8 install`
+After a sync PR lands, each application repo should run `openlore@2.1.9 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
 pre-commit there.
 
