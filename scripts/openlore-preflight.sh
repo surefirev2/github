@@ -10,7 +10,7 @@
 set -euo pipefail
 
 BUNDLE=".openlore/index-bundle.olbundle"
-PIN="${OPENLORE_NPM_PIN:-openlore@2.1.8}"
+PIN="${OPENLORE_NPM_PIN:-openlore@2.1.9}"
 # Optional. Default is graph-vs-working-tree (not --since): OpenLore's --since
 # mode stays STALE for new in-graph files on a dirty index even after analyze.
 BASE_REF="${OPENLORE_PREFLIGHT_SINCE:-}"
