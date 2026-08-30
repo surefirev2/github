@@ -88,4 +88,22 @@ See [OpenLore shareable bundles](https://github.com/clay-good/OpenLore/blob/main
 | `.openlore/index-bundle.olbundle` | **You** — refresh after in-graph source or config scope changes |
 | `.pre-commit-config.yaml` | **You** — opt into hub hooks; never overwritten by sync |
 
+## First sync bootstrap (required before merge)
+
+Template Sync opens a PR with workflows and this doc. It **never** edits
+`.pre-commit-config.yaml`. If the sync also ships `pre-commit-upstream-required.yml`,
+that check fails until you add the parent call on the **same** sync PR (or a
+follow-up that lands first):
+
+```yaml
+  - repo: https://github.com/surefirev2/github
+    rev: <pin a hub commit SHA that has .pre-commit-hooks.yaml>
+    hooks:
+      - id: openlore-preflight
+```
+
+Also commit `.openlore/config.json` (tuned includes/excludes — see above) and a
+fresh `.openlore/index-bundle.olbundle` before relying on the hook locally or in
+CI. Without the opt-in, `automerge-gate/all-passed` stays red on the sync PR.
+
 Upstream reference: [OpenLore configuration](https://github.com/clay-good/OpenLore/blob/main/docs/configuration.md).
