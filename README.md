@@ -56,14 +56,15 @@ Actions are pinned to immutable commit SHAs. Dependabot proposes weekly SHA bump
 `repo-sync-action` **opens PRs** in targets. It does not push to the target
 default branch.
 
-|| Path | Targets |
+| Path | Targets |
 |------|---------|
-| `.github/workflows/openlore-review.yml` | hockeymind, math-desktop, math_spike2, barn-league-hockey |
+| `.github/workflows/openlore-review.yml` | custos, hockeymind, math-desktop, math_spike2, surefire-dms |
 | `.github/workflows/openlore-ci.yml` | same |
 | `.github/openlore-config.json` | same (CI fallback; does not overwrite `.openlore/config.json`) |
 | `.cursor/rules/openlore.mdc` | same |
-| `.github/workflows/automerge-gate.yml` | barn-league-hockey only |
-| `.github/workflows/pre-commit-upstream-required.yml` | math_spike2 only (v1) |
+| `docs/openlore.md` | same (tune include/exclude — required for fast preflight) |
+| `.github/workflows/automerge-gate.yml` | same |
+| `.github/workflows/pre-commit-upstream-required.yml` | hockeymind, math-desktop, math_spike2, surefire-dms |
 
 **Never synced:** `.pre-commit-config.yaml`, `AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `.openlore/config.json`, the OpenLore analysis tree.
@@ -82,7 +83,9 @@ Keep your unique hooks. Add:
 
 Commit `.openlore/config.json` + `.openlore/index-bundle.olbundle` and refresh with
 `make openlore/refresh` (or `openlore@2.1.9 analyze --no-embed && openlore export bundle`)
-after in-graph changes.
+after in-graph changes. **Tune `includePatterns` / `excludePatterns` / `maxFiles`
+before a full rebuild** — see the synced [`docs/openlore.md`](docs/openlore.md);
+untuned trees make preflight re-analyze painfully slow on every commit.
 
 After a sync PR lands, each application repo should run `openlore@2.1.9 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
@@ -110,8 +113,8 @@ anything.
 ### If missing — configure on this repo (or org)
 
 1. Open the App: [surefirev2-token-app installation](https://github.com/organizations/surefirev2/settings/installations/65632433)
-   Ensure it can access `github` and every sync target (`barn-league-hockey`,
-   `hockeymind`, `math-desktop`, `math_spike2`).
+   Ensure it can access `github` and every sync target (`custos`,
+   `hockeymind`, `math-desktop`, `math_spike2`, `surefire-dms`).
    App permissions needed: **Contents** read/write, **Pull requests** read/write (and usually **Metadata** read).
 2. Get the App ID from [GitHub Apps settings](https://github.com/settings/apps) (or the installation page) — for this org it is **1237232**.
 3. Create or download a **private key** for the App (GitHub Apps → your app → Private keys → Generate).

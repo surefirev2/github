@@ -23,8 +23,9 @@ so agents fail fast before push.
 - `.github/workflows/openlore-ci.yml`
 - `.github/openlore-config.json` (CI fallback if a repo has no local config)
 - `.cursor/rules/openlore.mdc`
-- `.github/workflows/automerge-gate.yml` (barn-league-hockey only)
-- `.github/workflows/pre-commit-upstream-required.yml` (math_spike2 only for v1)
+- `docs/openlore.md` (tune include/exclude for fast analyze/preflight)
+- `.github/workflows/automerge-gate.yml` (all sync targets)
+- `.github/workflows/pre-commit-upstream-required.yml` (hockeymind, math-desktop, math_spike2, surefire-dms)
 
 **Never sync** (per-repo):
 
