@@ -87,6 +87,11 @@ after in-graph changes. **Tune `includePatterns` / `excludePatterns` / `maxFiles
 before a full rebuild** — see the synced [`docs/openlore.md`](docs/openlore.md);
 untuned trees make preflight re-analyze painfully slow on every commit.
 
+**First-time sync targets:** Template Sync cannot edit `.pre-commit-config.yaml`.
+Add the parent `openlore-preflight` call on the sync PR (see
+[`docs/openlore.md`](docs/openlore.md)#first-sync-bootstrap-required-before-merge)
+or `pre-commit-upstream-required` / automerge-gate stay red.
+
 After a sync PR lands, each application repo should run `openlore@2.1.9 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
 pre-commit there.
