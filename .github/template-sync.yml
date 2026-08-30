@@ -9,12 +9,14 @@ repositories:
   - hockeymind
   - math-desktop
   - math_spike2
+  - surefire-dms
 
 include_paths:
   - .github/workflows/openlore-review.yml
   - .github/workflows/openlore-ci.yml
   - .github/openlore-config.json
   - .cursor/rules/openlore.mdc
+  - docs/openlore.md
   - scripts/check-pre-commit-upstream-required.py
   - scripts/resolve-openlore-config.sh
 
@@ -28,6 +30,9 @@ repo_include_paths:
     - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
   math_spike2:
+    - .github/workflows/automerge-gate.yml
+    - .github/workflows/pre-commit-upstream-required.yml
+  surefire-dms:
     - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
 

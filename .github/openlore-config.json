@@ -3,9 +3,23 @@
   "projectType": "nodejs",
   "openspecPath": "./openspec",
   "analysis": {
-    "maxFiles": 100000,
+    "maxFiles": 1500,
     "includePatterns": [],
-    "excludePatterns": []
+    "excludePatterns": [
+      "**/node_modules/**",
+      "**/.nuxt/**",
+      "**/.output/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/coverage/**",
+      "**/.venv/**",
+      "**/vendor/**",
+      "**/generated/**",
+      "**/*.min.js",
+      "**/fixtures/**",
+      "**/testdata/**",
+      "**/.openlore/analysis/**"
+    ]
   },
   "enforcement": {
     "policy": {}

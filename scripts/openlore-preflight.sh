@@ -26,6 +26,10 @@ Refresh and stage the shareable index:
   openlore export bundle
   git add -f ${BUNDLE}
 
+If analyze is very slow, narrow analysis.includePatterns / excludePatterns and
+lower maxFiles in ${CONFIG} first (see docs/openlore.md). Do not raise maxFiles
+to paper over a huge tree.
+
 Do not use --reanalyze unless the source fingerprint is unchanged but the index must rebuild.
 EOF
 }
