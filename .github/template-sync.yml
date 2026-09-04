@@ -9,6 +9,7 @@ repositories:
   - hockeymind
   - math-desktop
   - math_spike2
+  - Meadowkin
   - surefire-dms
 
 include_paths:
@@ -33,6 +34,9 @@ repo_include_paths:
     - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
   surefire-dms:
+    - .github/workflows/automerge-gate.yml
+    - .github/workflows/pre-commit-upstream-required.yml
+  Meadowkin:
     - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
 
