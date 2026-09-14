@@ -39,6 +39,15 @@ OpenLore freshness is the `openlore-preflight` pre-commit hook (see
 The synced GHA only fails if a target repo’s pre-commit config lacks the hub
 parent call — it never overwrites that file.
 
+## Repo onboarding
+
+When a repo is added or renamed, follow the three-PR pattern in
+[docs/onboarding.md](docs/onboarding.md) and `.cursor/rules/repo-onboarding.mdc`:
+
+1. `terraform-github`: `variables.tf` + `moved` block + `branch_protection_status_checks`
+2. This hub: `.github/template-sync.yml` (use `scripts/onboard-repo.sh <repo-name>`)
+3. Target repo: `.pre-commit-config.yaml` — opt into `surefirev2/github` + `openlore-preflight`
+
 ## OpenLore
 
 Call `orient()` at the start of a task when the MCP server is wired. Governance

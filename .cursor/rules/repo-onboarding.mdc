@@ -1,0 +1,50 @@
+---
+description: Onboard a surefirev2 repo into the governance perimeter (branch protection, automerge-gate, OpenLore, pre-commit).
+metadata:
+  repo-onboarding-guidance: true
+trigger:
+  - user mentions repo onboarding, new repo setup, or branch protection for a surefirev2 repo
+  - user asks to enable automerge-gate, OpenLore CI, or pre-commit upstream gate on a repo
+---
+
+# Repository Onboarding
+
+A repo in the `surefirev2` org is fully onboarded only when it has:
+1. **Branch protection** with `automerge-gate/all-passed` required (via `terraform-github`)
+2. **automerge-gate** GitHub Actions workflow (cascaded from `surefirev2/github` hub)
+3. **OpenLore CI** workflow (cascaded from hub)
+4. **OpenLore review** workflow (cascaded from hub)
+5. **pre-commit upstream required** workflow + `.pre-commit-config.yaml` opt-in
+
+## Three-PR pattern (always)
+
+| PR | Repo | Purpose |
+|----|------|---------|
+| 1 | `terraform-github` | `variables.tf` key/name + `moved` block + `branch_protection_status_checks` |
+| 2 | `github` (hub) | `.github/template-sync.yml` — add repo to `repositories:` + `repo_include_paths:` |
+| 3 | Target repo | `.pre-commit-config.yaml` — add `surefirev2/github` parent + `openlore-preflight` hook |
+
+Merge order: 1, 2, 3. PR #2 cascades workflows asynchronously (hub workflow opens PRs in targets).
+
+## Gotchas
+
+- **Never rename a `for_each` key without a `moved` block** — destroy+create destroys the GitHub repo.
+- **Branch protection needs the workflow first** — merge #2 (or at least have the workflow PR open) before #1 applies, otherwise the required check doesn't exist and blocks all PRs.
+- **Template-sync is async** — #2 merge triggers a workflow; the target-repo PRs still need manual merge.
+- **openlore-preflight rev** must be a pinned hub commit SHA on `main` that contains `.pre-commit-hooks.yaml`. Get it: `gh api repos/surefirev2/github/commits/main --jq '.sha'`
+
+## Helper script
+
+Run `scripts/onboard-repo.sh <repo-name>` from a checkout of the hub `github` repo to:
+- Add the repo to `repositories:` list in `.github/template-sync.yml`
+- Add the repo to `repo_include_paths:` with automerge-gate + pre-commit-upstream-required
+- Update AGENTS.md in the target repo (if it exists) with OpenLore documentation
+
+## Verification
+
+```bash
+gh api repos/surefirev2/<repo>/branches/main/protection \
+  --jq '{enforce_admins: .enforce_admins.enabled, checks: .required_status_checks.contexts}'
+```
+
+Expected: `enforce_admins.enabled=true`, `checks.contexts` includes `automerge-gate/all-passed`.
