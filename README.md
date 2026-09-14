@@ -18,6 +18,22 @@ shape application repos should use.
 
 Do **not** open one-off PRs in target repos for files owned by this hub.
 
+## Onboarding a new/renamed repo
+
+See [docs/onboarding.md](docs/onboarding.md) and `.cursor/rules/repo-onboarding.mdc`.
+
+Three-PR pattern:
+
+| # | Repo | What |
+|---|------|------|
+| 1 | `terraform-github` | `variables.tf` key/name + `moved` block + `branch_protection_status_checks` |
+| 2 | `github` (this hub) | `.github/template-sync.yml` — add repo to `repositories:` + `repo_include_paths:` |
+| 3 | Target repo | `.pre-commit-config.yaml` — add `surefirev2/github` parent + `openlore-preflight` hook |
+
+Merge order: 1, 2, 3. PR #2 cascades workflows asynchronously.
+
+Helper: `scripts/onboard-repo.sh <repo-name>` (run from this checkout).
+
 ## Local setup
 
 Requires **Node.js 22.13+** (`node:sqlite`) and Python 3.12+ with
