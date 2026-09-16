@@ -32,14 +32,18 @@ jobs:
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '22.13'
+          # openlore@3.2.0 requires Node ^22.19.0 || >=23.5.0 (math-desktop
+          # EPI-18); the old '22.13' pin here predates that and is below the
+          # CLI's engine floor. A bare '22' tracks the runner's latest 22.x
+          # instead of going stale again.
+          node-version: 22
 
       - name: Resolve OpenLore config
         id: openlore-config
         run: bash scripts/resolve-openlore-config.sh >> "$GITHUB_OUTPUT"
 
       - name: Analyze
-        run: npx --yes openlore@2.1.9 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"
+        run: npx --yes openlore@3.2.0 analyze --no-embed --config "${{ steps.openlore-config.outputs.config }}"
 
       - name: Enforce (advisory)
-        run: npx --yes openlore@2.1.9 enforce --config "${{ steps.openlore-config.outputs.config }}"
+        run: npx --yes openlore@3.2.0 enforce --config "${{ steps.openlore-config.outputs.config }}"

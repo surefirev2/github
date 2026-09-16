@@ -71,8 +71,8 @@ hooks, prefer a few hundred to a few thousand files of **first-party** source—
 ## After you change the config
 
 ```bash
-npx --yes openlore@2.1.9 analyze --no-embed --config .openlore/config.json
-npx --yes openlore@2.1.9 export bundle
+npx --yes openlore@3.2.0 analyze --no-embed --config .openlore/config.json
+npx --yes openlore@3.2.0 export bundle
 git add -f .openlore/config.json .openlore/index-bundle.olbundle
 ```
 

@@ -40,12 +40,12 @@ Requires **Node.js 22.13+** (`node:sqlite`) and Python 3.12+ with
 [`pre-commit`](https://pre-commit.com/).
 
 ```bash
-make init    # pre-commit install && openlore@2.1.9 install --preset full
+make init    # pre-commit install && openlore@3.2.0 install --preset full
 make check   # pre-commit run --all-files
 ```
 
 `make init` wires Cursor / `AGENTS.md` managed OpenLore blocks and builds the
-local index (gitignored). Confirm with `openlore@2.1.9 doctor`.
+local index (gitignored). Confirm with `openlore@3.2.0 doctor`.
 
 Do not skip hooks with `git commit --no-verify`.
 
@@ -98,7 +98,7 @@ Keep your unique hooks. Add:
 ```
 
 Commit `.openlore/config.json` + `.openlore/index-bundle.olbundle` and refresh with
-`make openlore/refresh` (or `openlore@2.1.9 analyze --no-embed && openlore export bundle`)
+`make openlore/refresh` (or `openlore@3.2.0 analyze --no-embed && openlore export bundle`)
 after in-graph changes. **Tune `includePatterns` / `excludePatterns` / `maxFiles`
 before a full rebuild** — see the synced [`docs/openlore.md`](docs/openlore.md);
 untuned trees make preflight re-analyze painfully slow on every commit.
@@ -108,7 +108,7 @@ Add the parent `openlore-preflight` call on the sync PR (see
 [`docs/openlore.md`](docs/openlore.md)#first-sync-bootstrap-required-before-merge)
 or `pre-commit-upstream-required` / automerge-gate stay red.
 
-After a sync PR lands, each application repo should run `openlore@2.1.9 install`
+After a sync PR lands, each application repo should run `openlore@3.2.0 install`
 once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
 pre-commit there.
 
