@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 import yaml
 
 config_path = Path(".pre-commit-config.yaml")
@@ -11,11 +12,13 @@ if not config_path.is_file():
 data = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
 repos = data.get("repos") or []
 
+
 def normalize(url: str) -> str:
     u = (url or "").strip().rstrip("/")
     if u.endswith(".git"):
         u = u[:-4]
     return u.lower()
+
 
 matches = []
 for entry in repos:
