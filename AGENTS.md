@@ -54,13 +54,13 @@ Call `orient()` at the start of a task when the MCP server is wired. Governance
 is **advisory** until a finding is mapped to `blocking` in `.openlore/config.json`.
 No API key is required for analyze / enforce / review.
 
-Pinned CLI: `openlore@2.1.9`.
+Pinned CLI: `openlore@3.2.0`.
 
 <!-- BEGIN OPENLORE (managed — edits inside this block will be overwritten) -->
 <!-- openlore-fingerprint: 25cdd746ebf39b56 -->
 This project uses OpenLore for persistent architectural memory.
 
-ALWAYS call `orient()` (via the openlore MCP server, or `npx --yes openlore@2.1.9 orient --json`)
+ALWAYS call `orient()` (via the openlore MCP server, or `npx --yes openlore@3.2.0 orient --json`)
 before reading source files when starting a new task. This returns the relevant
 functions, callers, spec sections, and insertion points for the task at hand —
 one structural lookup instead of file-by-file rediscovery.
@@ -71,7 +71,7 @@ your last `orient()`. It is informational — re-`orient()` if you are relying o
 cached cross-module structure; otherwise carry on.
 
 The MCP server, if wired, should be pinned to the same version
-(`openlore@2.1.9`) as the CI/preflight hooks and the committed
+(`openlore@3.2.0`) as the CI/preflight hooks and the committed
 `.openlore/index-bundle.olbundle` schema — an unpinned `npx openlore orient`
 resolves to whatever is latest on npm and silently degrades to BM25-only
 search against a schema-mismatched graph.

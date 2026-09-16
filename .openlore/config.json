@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "projectType": "github-actions",
+  "projectType": "unknown",
   "openspecPath": "./openspec",
   "analysis": {
     "maxFiles": 500,
@@ -9,5 +9,10 @@
   },
   "enforcement": {
     "policy": {}
-  }
+  },
+  "generation": {
+    "domains": "auto"
+  },
+  "createdAt": "2026-09-16T12:00:00.000Z",
+  "lastRun": null
 }
