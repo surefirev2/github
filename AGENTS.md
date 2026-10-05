@@ -25,7 +25,7 @@ so agents fail fast before push.
 - `.cursor/rules/openlore.mdc`
 - `docs/openlore.md` (tune include/exclude for fast analyze/preflight)
 - `.github/workflows/automerge-gate.yml` (all sync targets)
-- `.github/workflows/pre-commit-upstream-required.yml` (hockeymind, math-desktop, math_spike2, surefire-dms)
+- `.github/workflows/pre-commit-upstream-required.yml` (math-desktop, math_spike2, surefire-dms, Meadowkin, revive, terraform-cloudflare-surefire)
 
 **Never sync** (per-repo):
 

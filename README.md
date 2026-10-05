@@ -74,13 +74,13 @@ default branch.
 
 | Path | Targets |
 |------|---------|
-| `.github/workflows/openlore-review.yml` | custos, hockeymind, math-desktop, math_spike2, surefire-dms |
+| `.github/workflows/openlore-review.yml` | custos, math-desktop, math_spike2, Meadowkin, revive, surefire-dms, terraform-cloudflare-surefire |
 | `.github/workflows/openlore-ci.yml` | same |
 | `.github/openlore-config.json` | same (CI fallback; does not overwrite `.openlore/config.json`) |
 | `.cursor/rules/openlore.mdc` | same |
 | `docs/openlore.md` | same (tune include/exclude — required for fast preflight) |
 | `.github/workflows/automerge-gate.yml` | same |
-| `.github/workflows/pre-commit-upstream-required.yml` | hockeymind, math-desktop, math_spike2, surefire-dms |
+| `.github/workflows/pre-commit-upstream-required.yml` | math-desktop, math_spike2, Meadowkin, revive, surefire-dms, terraform-cloudflare-surefire |
 
 **Never synced:** `.pre-commit-config.yaml`, `AGENTS.md`, `CLAUDE.md`,
 `.cursorrules`, `.openlore/config.json`, the OpenLore analysis tree.
@@ -109,8 +109,8 @@ Add the parent `openlore-preflight` call on the sync PR (see
 or `pre-commit-upstream-required` / automerge-gate stay red.
 
 After a sync PR lands, each application repo should run `openlore@3.2.0 install`
-once locally. hockeymind uses Husky; do not install OpenLore's `.git/hooks`
-pre-commit there.
+once locally. Repos that use Husky should not install OpenLore's `.git/hooks`
+pre-commit.
 
 ## GitHub App setup (manual)
 
@@ -135,7 +135,8 @@ anything.
 
 1. Open the App: [surefirev2-token-app installation](https://github.com/organizations/surefirev2/settings/installations/65632433)
    Ensure it can access `github` and every sync target (`custos`,
-   `hockeymind`, `math-desktop`, `math_spike2`, `surefire-dms`).
+   `math-desktop`, `math_spike2`, `Meadowkin`, `revive`, `surefire-dms`,
+   `terraform-cloudflare-surefire`).
    App permissions needed: **Contents** read/write, **Pull requests** read/write (and usually **Metadata** read).
 2. Get the App ID from [GitHub Apps settings](https://github.com/settings/apps) (or the installation page) — for this org it is **1237232**.
 3. Create or download a **private key** for the App (GitHub Apps → your app → Private keys → Generate).
