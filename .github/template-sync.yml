@@ -6,7 +6,6 @@
 # repo-sync-action opens PRs in targets; it does not push to default branches.
 repositories:
   - custos
-  - hockeymind
   - math-desktop
   - math_spike2
   - Meadowkin
@@ -26,9 +25,6 @@ include_paths:
 repo_include_paths:
   custos:
     - .github/workflows/automerge-gate.yml
-  hockeymind:
-    - .github/workflows/automerge-gate.yml
-    - .github/workflows/pre-commit-upstream-required.yml
   math-desktop:
     - .github/workflows/automerge-gate.yml
     - .github/workflows/pre-commit-upstream-required.yml
