@@ -29,9 +29,7 @@ for entry in repos:
         continue
     rev = entry.get("rev")
     ids = [
-        str(h.get("id"))
-        for h in (entry.get("hooks") or [])
-        if isinstance(h, dict) and h.get("id")
+        str(h.get("id")) for h in (entry.get("hooks") or []) if isinstance(h, dict) and h.get("id")
     ]
     matches.append((repo, rev, ids))
 if not matches:
