@@ -1,0 +1,106 @@
+# Org-wide Actions artifact + GitHub Packages prune using maintained Actions/CLIs.
+# Prefer retention-days on producers + org Settings → Actions → Artifact retention (7d).
+
+name: Storage GC
+
+on:
+  schedule:
+    # Weekly Sunday 06:30 UTC
+    - cron: '30 6 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List / dry-run only (no destructive deletes where supported)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  actions: write
+  packages: write
+
+env:
+  # Keep newest N npm versions (space-first; not semver-minor-aware).
+  NPM_MIN_VERSIONS_TO_KEEP: '5'
+  ARTIFACT_RETENTION_DAYS: '3'
+
+jobs:
+  storage-gc:
+    name: Prune artifacts and packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Resolve dry-run
+        id: mode
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo "dry_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Prior art: andyfeller/gh-artifact-purge (org-wide Actions artifacts)
+      - name: Purge old Actions artifacts (org)
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          gh extension install andyfeller/gh-artifact-purge
+          args=( "${{ github.repository_owner }}" "${{ env.ARTIFACT_RETENTION_DAYS }}" --purge-expired )
+          if [[ "${{ steps.mode.outputs.dry_run }}" != "true" ]]; then
+            args+=( --run )
+          fi
+          echo "Running: gh artifact-purge ${args[*]}"
+          gh artifact-purge "${args[@]}"
+
+      # Official: actions/delete-package-versions (keep newest N)
+      # No dry-run input — skip on dry_run; apply deletes up to 100 oldest beyond keep-N.
+      - name: Prune npm @surefirev2/math-spike2
+        if: steps.mode.outputs.dry_run != 'true'
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          owner: ${{ github.repository_owner }}
+          package-name: math-spike2
+          package-type: npm
+          min-versions-to-keep: ${{ env.NPM_MIN_VERSIONS_TO_KEEP }}
+          num-old-versions-to-delete: '100'
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: npm prune skipped (dry-run)
+        if: steps.mode.outputs.dry_run == 'true'
+        run: |
+          echo "Dry-run: would keep ${{ env.NPM_MIN_VERSIONS_TO_KEEP }} newest npm versions of math-spike2"
+          echo "(actions/delete-package-versions has no dry-run mode)"
+
+      # Marketplace: dataaxiom/ghcr-cleanup-action
+      - name: Cleanup GHCR comic-reader
+        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          owner: ${{ github.repository_owner }}
+          package: comic-reader
+          exclude-tags: latest,main
+          keep-n-tagged: '3'
+          delete-untagged: 'true'
+          dry-run: ${{ steps.mode.outputs.dry_run }}
+
+      - name: Cleanup GHCR nuxt-ucda-dev
+        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          owner: ${{ github.repository_owner }}
+          package: nuxt-ucda-dev
+          keep-n-tagged: '2'
+          delete-untagged: 'true'
+          dry-run: ${{ steps.mode.outputs.dry_run }}
