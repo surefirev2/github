@@ -1,0 +1,80 @@
+# Org-wide Actions artifact + GitHub Packages prune.
+# npm keep policy: newest patch per minor; latest two minors only.
+# Also set org Settings → Actions → Artifact and log retention to 7 days (admin).
+
+name: Storage GC
+
+on:
+  schedule:
+    # Weekly Sunday 06:30 UTC (after math_spike2 local artifact-cleanup)
+    - cron: '30 6 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List deletions only (no DELETE)'
+        required: false
+        default: true
+        type: boolean
+      package_name:
+        description: 'Optional: limit package prune to this name'
+        required: false
+        default: ''
+        type: string
+      skip_artifacts:
+        description: 'Skip Actions artifact sweep'
+        required: false
+        default: false
+        type: boolean
+      skip_packages:
+        description: 'Skip npm/container package prune'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: write
+  packages: write
+
+jobs:
+  storage-gc:
+    name: Prune artifacts and packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run storage GC
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          STORAGE_GC_ORG: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/storage_gc.py
+          args=()
+          # schedule always applies; workflow_dispatch respects dry_run (default true)
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            args+=(--apply)
+          elif [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            args+=(--dry-run)
+          else
+            args+=(--apply)
+          fi
+          if [[ -n "${{ inputs.package_name }}" ]]; then
+            args+=(--package "${{ inputs.package_name }}")
+          fi
+          if [[ "${{ inputs.skip_artifacts }}" == "true" ]]; then
+            args+=(--skip-artifacts)
+          fi
+          if [[ "${{ inputs.skip_packages }}" == "true" ]]; then
+            args+=(--skip-packages)
+          fi
+          python3 scripts/storage_gc.py "${args[@]}"

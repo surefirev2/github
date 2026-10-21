@@ -18,6 +18,12 @@ shape application repos should use.
 
 Do **not** open one-off PRs in target repos for files owned by this hub.
 
+## Storage GC
+
+Org-wide Actions artifact + GitHub Packages prune runs from this hub
+([`Storage GC`](.github/workflows/storage-gc.yml)). See [docs/storage-gc.md](docs/storage-gc.md).
+It is **not** template-synced; one scheduled job covers the org.
+
 ## Onboarding a new/renamed repo
 
 See [docs/onboarding.md](docs/onboarding.md) and `.cursor/rules/repo-onboarding.mdc`.
