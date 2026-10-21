@@ -12,6 +12,10 @@ Workflow: [`.github/workflows/storage-gc.yml`](../.github/workflows/storage-gc.y
 
 Auth: hub GitHub App (`APP_ID` / `PRIVATE_KEY`), same pattern as template sync.
 
+The App installation must allow **Packages: Read and write** (includes version
+delete). A user `GH_TOKEN` with only `read:packages` cannot prune npm/GHCR
+locally — use the workflow (App token) or a PAT with `delete:packages`.
+
 ## What it uses
 
 | Surface | Tool | Policy (space-first) |
